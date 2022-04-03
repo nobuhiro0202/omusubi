@@ -27,6 +27,17 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "firebase": {
+        "apiKey": "AIzaSyC09sjeJcpQvBR6Cc5wsO2eF1TLdPZkakw",
+        "authDomain": "omusubi-2c31a.firebaseapp.com",
+        "projectId": "omusubi-2c31a",
+        "storageBucket": "omusubi-2c31a.appspot.com",
+        "messagingSenderId": "46149857622",
+        "appId": "1:46149857622:web:c9e7bbd83c9456909de6f7",
+        "measurementId": "G-HCRLW4SGFW"
+      }
     }
   }
 }
