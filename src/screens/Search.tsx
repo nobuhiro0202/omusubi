@@ -12,24 +12,8 @@ import uuid from 'react-native-uuid';
 import { historyCollectionRef } from '../plugins/firebase';
 import { addDoc } from 'firebase/firestore';
 import { GOOGLE } from '../apis/suggest_service';
+const { parseString } = require('react-native-xml2js');
 
-function decord10(str) {
-    var tmpStr = "";
-    let decArray = [];
- 
-    // 置換
-    tmpStr = str.replace(/(<br>|<br \/>)/gi, ''); 
-    tmpStr = tmpStr.replace(/(\(|（)/gi, '(');              // 左カッコを"("に置換
-    tmpStr = tmpStr.replace(/(\)|）)/gi, ')');              // 右カッコを"("に置換
-    tmpStr = tmpStr.replace(/\s+/gi, " ");                  // スペースを" "に置換
-    tmpStr = tmpStr.replace(/&#/g, "");                         // "&#"を削除
-    tmpStr = tmpStr.substr(0 , (tmpStr.length-1));              // 右端の";"を削除
-    decArray = tmpStr.split(";");                               // ";"文字で分割、配列化
- 
-    // fromCharCode : 
-    const result = String.fromCharCode.apply(null, decArray);         // デコード実行
-    return result;
-}
 
 const Home = () => {
   const [ word, setWord ] = useState('');
@@ -37,38 +21,16 @@ const Home = () => {
   
   const onSearch = async () => {
     const url = GOOGLE + word;
-    console.log(url);
     fetch(url)
     .then(res => res.text())
-    .then(d => console.log(d))
+    .then(d => {
+      parseString(d, (err: any, result: any) => {
+        const s = result['toplevel']['CompleteSuggestion'];
+        const suggestions = s.map(t => t['suggestion'][0]['$']['data'].replace(word, ''));
+        console.log(suggestions);
+      });
+    })
     .catch(err => console.error(err));
-    // const res = await fetch(url);
-    // console.log(res);
-    // const result = res.json();
-    // console.log(result);
-    // const data = [{
-    //   "keyword": word,
-    //   "location_code": 2840,
-    //   "language_name": "Japanese",
-    //   "filters": [
-    //         ["keyword_info.search_volume", ">", 10]
-    //     ],
-    //   "limit": 3
-    // }];
-    // const res = await axios({
-    //   method: 'post',
-    //   url: url,
-    //   auth: {
-    //     username: 'nobu.s1322@gmail.com',
-    //     password: '3d02f609b1eb5c2d',
-    //   },
-    //   data: data,
-    //   headers: {
-    //     'content-type': 'application/json'
-    //   }
-    // });
-    // const result = res['data']['tasks'];
-    // console.log(result);
     await addDoc(historyCollectionRef, { 
       id: uuid.v4(), 
       title: word, 
