@@ -18,26 +18,29 @@ const { parseString } = require('react-native-xml2js');
 const Home = () => {
   const [ word, setWord ] = useState('');
   const [ title, setTitle ] = useState('');
+  const [ suggest, setSuggest ] = useState([]);
   
   const onSearch = async () => {
-    const url = GOOGLE + word;
-    fetch(url)
-    .then(res => res.text())
-    .then(d => {
-      parseString(d, (err: any, result: any) => {
-        const s = result['toplevel']['CompleteSuggestion'];
-        const suggestions = s.map(t => t['suggestion'][0]['$']['data'].replace(word, ''));
-        console.log(suggestions);
-      });
-    })
-    .catch(err => console.error(err));
-    await addDoc(historyCollectionRef, { 
-      id: uuid.v4(), 
-      title: word, 
-      createdAt: new Date() });
-    setTitle(word);
-    setWord('');
-
+    if (word !== '') {
+      const url = GOOGLE + word;
+      fetch(url)
+      .then(res => res.text())
+      .then(d => {
+        parseString(d, (err: any, result: any) => {
+          const s = result['toplevel']['CompleteSuggestion'];
+          const st = s.map(t => t['suggestion'][0]['$']['data'].replace(word, ''));
+          setSuggest(st);
+        });
+        console.log(suggest);
+      })
+      .catch(err => console.error(err));
+      await addDoc(historyCollectionRef, { 
+        id: uuid.v4(), 
+        title: word, 
+        createdAt: new Date() });
+      setTitle(word);
+      setWord('');
+    }
   };
 
   return (

@@ -43,4 +43,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  history: {
+    width: '100%',
+    height: 60,
+    paddingLeft: 30,
+    paddingTop: 10,
+    borderWidth: 1,
+    borderBottomColor: 'gray',
+  },
+  h_text: {
+    fontSize: 20
+  }
 });

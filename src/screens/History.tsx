@@ -1,4 +1,8 @@
-import { Text, SafeAreaView } from 'react-native';
+import { 
+  View,
+  Text, 
+  SafeAreaView
+ } from 'react-native';
 import { styles } from '../styles/Styles';
 import { historyCollectionRef } from '../plugins/firebase';
 import { getDocs } from 'firebase/firestore';
@@ -22,7 +26,7 @@ const History = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {histories?.map((history, index) => <Text key={index}>title: {history.title}</Text>)}
+      {histories?.map((history, index) => <View style={styles.history}><Text key={index} style={styles.h_text}>title: {history.title}</Text></View>)}
     </SafeAreaView>
   );
 };
